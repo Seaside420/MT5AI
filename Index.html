@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trader | MT5 Terminal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f1923;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── Header ──────────────────────────── */
+        .header {
+            background: #1a2632;
+            border-bottom: 1px solid #2a3a4a;
+            padding: 0 24px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-dot {
+            width: 10px;
+            height: 10px;
+            background: #00e676;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00e676;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            color: #e0e6ed;
+        }
+
+        .header h1 span {
+            color: #00e676;
+            font-weight: 300;
+        }
+
+        .status-badge {
+            font-size: 12px;
+            background: #1a3322;
+            color: #00e676;
+            border: 1px solid #00e67633;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-left: 12px;
+        }
+
+        /* ── Main Split ──────────────────────── */
+        .main-container {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 56px);
+        }
+
+        .panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #2a3a4a;
+        }
+
+        .panel:last-child {
+            border-right: none;
+        }
+
+        .panel-header {
+            background: #1a2632;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #8a9bb5;
+            border-bottom: 1px solid #2a3a4a;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-header .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .indicator.ai { background: #7c4dff; box-shadow: 0 0 6px #7c4dff; }
+        .indicator.mt5 { background: #ff6d00; box-shadow: 0 0 6px #ff6d00; }
+
+        .panel iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+            background: #fff; /* MT5 terminal needs white bg */
+        }
+
+        .ai-panel iframe {
+            background: #1a1f2e; /* dark bg for AI chat */
+        }
+
+        /* ── Responsive ──────────────────────── */
+        @media (max-width: 800px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .panel {
+                border-right: none;
+                border-bottom: 1px solid #2a3a4a;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Header ──────────────────────────── -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo-dot"></div>
+            <h1>Trade<span>AI</span></h1>
+            <span class="status-badge">● LIVE</span>
+        </div>
+        <div style="font-size: 12px; color: #5a6d80;">
+            MT5 Bridge • VPS Connected
+        </div>
+    </div>
+
+    <!-- ── Main Split ──────────────────────── -->
+    <div class="main-container">
+
+        <!-- LEFT: AI Agent Chat -->
+        <div class="panel ai-panel">
+            <div class="panel-header">
+                <span class="indicator ai"></span>
+                AI Trading Agent
+            </div>
+            <!-- REPLACE THIS SRC WITH YOUR DIFY AGENT URL -->
+            <iframe src="https://udify.app/chat/XfseWXYpuSiL7k3s"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <!-- RIGHT: MT5 Web Terminal -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="indicator mt5"></span>
+                MT5 Web Terminal
+            </div>
+            <!-- REPLACE THIS SRC WITH YOUR MT5 WEB TERMINAL URL -->
+            <iframe src="https://metatraderweb.app/trade?demo_all_servers=1&startup_mode=open_demo&lang=en&save_password=on"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+    </div>
+
+</body>
+</html>
