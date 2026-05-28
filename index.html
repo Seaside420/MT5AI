@@ -183,6 +183,45 @@
         </div>
 
     </div>
+<script>
+    // Auto-prompt AI every 60 minutes (3600000 ms)
+    // Change interval below if desired
 
+    const DIFY_API_KEY = 'app-6KnkpVTQrrSM9uSVjHuEtYxy';
+    const DIFY_API_URL = 'https://api.dify.ai/v1/chat-messages';
+    
+    // Function to send message to Dify API
+    async function sendPromptToAI() {
+        const query = "Run full analysis on all assets and execute any valid trades.";
+        
+        try {
+            const response = await fetch(DIFY_API_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${DIFY_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    query: query,
+                    user: "website_auto_trader",
+                    response_mode: "blocking"
+                })
+            });
+            
+            const data = await response.json();
+            console.log('Auto-trade triggered:', new Date().toLocaleTimeString());
+            console.log('Response:', data);
+            
+        } catch (error) {
+            console.error('Auto-prompt failed:', error);
+        }
+    }
+    
+    // Run immediately on page load (optional - remove if not wanted)
+    // sendPromptToAI();
+    
+    // Set interval (60 minutes)
+    setInterval(sendPromptToAI, 10 * 60 * 1000);
+</script>
 </body>
 </html>
