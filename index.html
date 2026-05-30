@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Trader | MT5 Terminal</title>
+    <title>TradeAI | Automated Forex Terminal</title>
     <style>
         * {
             margin: 0;
@@ -12,39 +12,38 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f1923;
-            color: #fff;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: #0a0f1a;
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        /* ── Header ──────────────────────────── */
+        /* ========== HEADER (Compact) ========== */
         .header {
-            background: #1a2632;
-            border-bottom: 1px solid #2a3a4a;
-            padding: 0 24px;
-            height: 56px;
+            background: #0f172a;
+            border-bottom: 1px solid #1e293b;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 20px;
             flex-shrink: 0;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .logo-dot {
-            width: 10px;
-            height: 10px;
+        .status-dot {
+            width: 8px;
+            height: 8px;
             background: #00e676;
             border-radius: 50%;
-            box-shadow: 0 0 8px #00e676;
+            box-shadow: 0 0 6px #00e676;
             animation: pulse 2s infinite;
         }
 
@@ -54,54 +53,56 @@
         }
 
         .header h1 {
-            font-size: 20px;
+            font-size: 14px;
             font-weight: 600;
-            letter-spacing: -0.3px;
-            color: #e0e6ed;
+            color: #e2e8f0;
+            letter-spacing: -0.2px;
         }
 
         .header h1 span {
             color: #00e676;
-            font-weight: 300;
         }
 
-        .status-badge {
-            font-size: 12px;
-            background: #1a3322;
+        .header-badge {
+            font-size: 10px;
+            background: #1a2e1f;
             color: #00e676;
             border: 1px solid #00e67633;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-left: 12px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
         }
 
-        /* ── Main Split ──────────────────────── */
+        .header-right {
+            font-size: 10px;
+            color: #5a6d80;
+        }
+
+        /* ========== MAIN SPLIT LAYOUT ========== */
         .main-container {
             display: flex;
             flex: 1;
-            height: calc(100vh - 56px);
+            height: calc(100vh - 40px);
+            gap: 1px;
+            background: #1e293b;
         }
 
         .panel {
             flex: 1;
             display: flex;
             flex-direction: column;
-            border-right: 1px solid #2a3a4a;
-        }
-
-        .panel:last-child {
-            border-right: none;
+            background: #0f172a;
         }
 
         .panel-header {
-            background: #1a2632;
-            padding: 10px 20px;
-            font-size: 13px;
+            background: #0a0f1a;
+            padding: 6px 16px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: #8a9bb5;
-            border-bottom: 1px solid #2a3a4a;
+            color: #5a6d80;
+            border-bottom: 1px solid #1e293b;
             flex-shrink: 0;
             display: flex;
             align-items: center;
@@ -109,62 +110,283 @@
         }
 
         .panel-header .indicator {
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            flex-shrink: 0;
         }
 
-        .indicator.ai { background: #7c4dff; box-shadow: 0 0 6px #7c4dff; }
-        .indicator.mt5 { background: #ff6d00; box-shadow: 0 0 6px #ff6d00; }
+        .indicator.ai {
+            background: #7c4dff;
+            box-shadow: 0 0 4px #7c4dff;
+        }
+
+        .indicator.mt5 {
+            background: #ff6d00;
+            box-shadow: 0 0 4px #ff6d00;
+        }
 
         .panel iframe {
             flex: 1;
             width: 100%;
             border: none;
-            background: #fff; /* MT5 terminal needs white bg */
+            background: #fff;
         }
 
         .ai-panel iframe {
-            background: #1a1f2e; /* dark bg for AI chat */
+            background: #0f172a;
         }
 
-        /* ── Responsive ──────────────────────── */
+        /* ========== SPLASH MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.hidden {
+            display: none;
+        }
+
+        .modal {
+            background: #0f172a;
+            border: 1px solid #00e67633;
+            border-radius: 20px;
+            max-width: 480px;
+            width: 90%;
+            padding: 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(90deg, #0a0f1a 0%, #0f172a 100%);
+            padding: 20px 24px 12px 24px;
+            border-bottom: 1px solid #1e293b;
+            text-align: center;
+        }
+
+        .modal-header .logo-dot {
+            width: 10px;
+            height: 10px;
+            background: #00e676;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px #00e676;
+            margin-right: 8px;
+        }
+
+        .modal-header h2 {
+            color: #e2e8f0;
+            font-size: 22px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .modal-header h2 span {
+            color: #00e676;
+        }
+
+        .modal-header .status {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #00e676;
+            background: #1a2e1f;
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
+
+        .modal-body {
+            padding: 20px 24px;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        .info-section h4 {
+            color: #00e676;
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .asset-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .asset-tag {
+            background: #1e293b;
+            color: #cbd5e1;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 16px;
+            border: 1px solid #334155;
+        }
+
+        .rule-list {
+            list-style: none;
+        }
+
+        .rule-list li {
+            color: #94a3b8;
+            font-size: 12px;
+            padding: 4px 0;
+            padding-left: 18px;
+            position: relative;
+        }
+
+        .rule-list li::before {
+            content: "•";
+            color: #00e676;
+            position: absolute;
+            left: 4px;
+        }
+
+        .disclaimer {
+            background: #1a0f0f;
+            border-left: 3px solid #ff6d00;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .disclaimer p {
+            color: #f87171;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .modal-footer {
+            padding: 16px 24px 24px 24px;
+            border-top: 1px solid #1e293b;
+            text-align: center;
+        }
+
+        .launch-btn {
+            background: linear-gradient(90deg, #00e676 0%, #00bcd4 100%);
+            border: none;
+            color: #0a0f1a;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 12px 32px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            width: 100%;
+            letter-spacing: 0.5px;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0, 230, 118, 0.3);
+        }
+
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 800px) {
             .main-container {
                 flex-direction: column;
             }
-            .panel {
-                border-right: none;
-                border-bottom: 1px solid #2a3a4a;
+            .panel-header {
+                padding: 8px 16px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ── Header ──────────────────────────── -->
-    <div class="header">
-        <div class="header-left">
-            <div class="logo-dot"></div>
-            <h1>Trade<span>AI</span></h1>
-            <span class="status-badge">● LIVE</span>
-        </div>
-        <div style="font-size: 12px; color: #5a6d80;">
-            MT5 Bridge • VPS Connected
+    <!-- SPLASH MODAL -->
+    <div class="modal-overlay" id="splashModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <span class="logo-dot"></span>
+                    <h2>Trade<span>AI</span></h2>
+                </div>
+                <div class="status">● SYSTEM ONLINE</div>
+            </div>
+            <div class="modal-body">
+                <div class="info-section">
+                    <h4>📊 MONITORED ASSETS</h4>
+                    <div class="asset-grid">
+                        <span class="asset-tag">XAUUSD</span>
+                        <span class="asset-tag">XAGUSD</span>
+                        <span class="asset-tag">BRENT</span>
+                        <span class="asset-tag">EURUSD</span>
+                        <span class="asset-tag">GBPUSD</span>
+                        <span class="asset-tag">USDJPY</span>
+                        <span class="asset-tag">AUDUSD</span>
+                        <span class="asset-tag">USDCAD</span>
+                        <span class="asset-tag">NZDUSD</span>
+                        <span class="asset-tag">USDCHF</span>
+                        <span class="asset-tag">NZDJPY</span>
+                        <span class="asset-tag">NZDCHF</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h4>🛡️ RISK RULES</h4>
+                    <ul class="rule-list">
+                        <li>Breakeven: +15 pips (Forex) / +150 pips (Gold/Silver)</li>
+                        <li>Max 3 positions per symbol</li>
+                        <li>Stop if free margin &lt; 5% of balance</li>
+                        <li>CCI + HMA + Fundamentals + Sentiment confirmation</li>
+                    </ul>
+                </div>
+
+                <div class="disclaimer">
+                    <p>⚠️ DEMO ACCOUNT MODE • For educational & testing purposes only.<br>
+                    No real funds at risk. Past performance does not guarantee future results.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="launch-btn" id="launchBtn">⟳ LAUNCH DASHBOARD</button>
+            </div>
         </div>
     </div>
 
-    <!-- ── Main Split ──────────────────────── -->
-    <div class="main-container">
+    <!-- MAIN DASHBOARD -->
+    <div class="header">
+        <div class="header-left">
+            <div class="status-dot"></div>
+            <h1>Trade<span>AI</span></h1>
+            <span class="header-badge">AUTOMATED</span>
+        </div>
+        <div class="header-right">
+            MT5 Bridge • VPS
+        </div>
+    </div>
 
-        <!-- LEFT: AI Agent Chat -->
+    <div class="main-container">
+        <!-- LEFT: Dify AI Agent -->
         <div class="panel ai-panel">
             <div class="panel-header">
                 <span class="indicator ai"></span>
-                AI Trading Agent
+                AI TRADING AGENT
             </div>
-            <!-- REPLACE THIS SRC WITH YOUR DIFY AGENT URL -->
             <iframe src="https://udify.app/chat/XfseWXYpuSiL7k3s"
                     allowfullscreen>
             </iframe>
@@ -174,15 +396,37 @@
         <div class="panel">
             <div class="panel-header">
                 <span class="indicator mt5"></span>
-                MT5 Web Terminal
+                MT5 TERMINAL
             </div>
-            <!-- REPLACE THIS SRC WITH YOUR MT5 WEB TERMINAL URL -->
             <iframe src="https://mt5-demo.blackbull.com/terminal"
                     allowfullscreen>
             </iframe>
         </div>
-
     </div>
 
+    <script>
+        // Splash modal with localStorage (shows once per browser)
+        const modal = document.getElementById('splashModal');
+        const launchBtn = document.getElementById('launchBtn');
+
+        // Check if user has seen the modal before
+        if (localStorage.getItem('tradeai_splash_seen') === 'true') {
+            modal.classList.add('hidden');
+        }
+
+        // Launch button handler
+        launchBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            localStorage.setItem('tradeai_splash_seen', 'true');
+        });
+
+        // Optional: Click outside to close (but recommend using button)
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+                localStorage.setItem('tradeai_splash_seen', 'true');
+            }
+        });
+    </script>
 </body>
 </html>
