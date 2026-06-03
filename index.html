@@ -339,8 +339,16 @@
                         <span class="asset-tag">USDJPY</span>
                         <span class="asset-tag">AUDUSD</span>
                         <span class="asset-tag">USDCAD</span>
+                        <span class="asset-tag">USDCHF</span>
                         <span class="asset-tag">NZDUSD</span>
                         <span class="asset-tag">NZDJPY</span>
+                        <span class="asset-tag">EURGBP</span>
+                        <span class="asset-tag">EURJPY</span>
+                        <span class="asset-tag">GBPJPY</span>
+                        <span class="asset-tag">AUDJPY</span>
+                        <span class="asset-tag">CADJPY</span>
+                        <span class="asset-tag">EURAUD</span>
+                        <span class="asset-tag">NZDCAD</span>
                     </div>
                 </div>
 
@@ -407,26 +415,21 @@
     </div>
 
     <script>
-        // Splash modal with localStorage (shows once per browser)
         const modal = document.getElementById('splashModal');
         const launchBtn = document.getElementById('launchBtn');
-
-        // Check if user has seen the modal before
-        if (localStorage.getItem('tradeai_splash_seen') === 'true') {
-            modal.classList.add('hidden');
-        }
-
+    
+        // Always show splash on every page load
+        modal.classList.remove('hidden');
+    
         // Launch button handler
         launchBtn.addEventListener('click', () => {
             modal.classList.add('hidden');
-            localStorage.setItem('tradeai_splash_seen', 'true');
         });
-
-        // Optional: Click outside to close (but recommend using button)
+    
+        // Click outside to close
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.classList.add('hidden');
-                localStorage.setItem('tradeai_splash_seen', 'true');
             }
         });
     </script>
