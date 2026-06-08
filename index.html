@@ -473,10 +473,10 @@
             🤖
         </div>
         <a href="https://images.weserv.nl/?url=http://192.3.3.151/bot_thoughts.png&refresh=true" target="_blank" style="background: #1e293b; color: #00e676; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
-            📸 Last cycle
+            📸 recent cycle
         </a>
         <div class="timestamp" id="timestamp">
-            Last update: --
+            Running since: 07/06/2026
         </div>
     </div>
 
@@ -499,22 +499,6 @@
             }
         });
 
-        // Auto-refresh timestamp and bust cache on image
-        function updateTimestamp() {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString();
-            document.getElementById('timestamp').innerHTML = '🕐 Last update: ' + timeStr;
-            
-            // Bust cache on image
-            const img = document.querySelector('.thoughts-image img');
-            const currentSrc = img.src;
-            const bustCache = '?t=' + new Date().getTime();
-            img.src = currentSrc.split('?')[0] + bustCache;
-        }
-
-        // Update timestamp every 10 seconds (image updates every 10 min, but timestamp shows fresh)
-        setInterval(updateTimestamp, 10000);
-        updateTimestamp();
     </script>
 </body>
 </html>
