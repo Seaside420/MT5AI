@@ -474,6 +474,14 @@
         </div>
         <div class="thoughts-image">
             <img src="https://images.weserv.nl/?url=http://192.3.3.151/bot_thoughts.png" alt="Bot thoughts screenshot" />
+            <script>
+            function loadImage() {
+                const img = document.getElementById('botThoughts');
+                img.src = 'http://192.3.3.151/bot_thoughts.png?t=' + new Date().getTime();
+            }
+            loadImage();
+            setInterval(loadImage, 10000);
+            </script>
         </div>
         <div class="timestamp" id="timestamp">
             Last update: --
