@@ -82,7 +82,7 @@
         .main-container {
             display: flex;
             flex: 1;
-            height: calc(100vh - 40px);
+            min-height: 0;
             gap: 1px;
             background: #1e293b;
         }
@@ -92,6 +92,7 @@
             display: flex;
             flex-direction: column;
             background: #0f172a;
+            min-width: 0;
         }
 
         .panel-header {
@@ -134,6 +135,59 @@
 
         .ai-panel iframe {
             background: #0f172a;
+        }
+
+        /* ========== BOT THOUGHTS FOOTER ========== */
+        .thoughts-footer {
+            flex-shrink: 0;
+            background: #0a0f1a;
+            border-top: 1px solid #1e293b;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .thoughts-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #5a6d80;
+            flex-shrink: 0;
+        }
+
+        .thoughts-label .brain-dot {
+            width: 6px;
+            height: 6px;
+            background: #7c4dff;
+            border-radius: 50%;
+            box-shadow: 0 0 4px #7c4dff;
+        }
+
+        .thoughts-image {
+            flex: 1;
+            text-align: center;
+            max-height: 180px;
+            overflow: hidden;
+        }
+
+        .thoughts-image img {
+            max-height: 160px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background: #0f172a;
+        }
+
+        .timestamp {
+            font-size: 10px;
+            color: #475569;
+            flex-shrink: 0;
+            font-family: monospace;
         }
 
         /* ========== SPLASH MODAL ========== */
@@ -313,6 +367,14 @@
             .panel-header {
                 padding: 8px 16px;
             }
+            .thoughts-footer {
+                flex-direction: column;
+                padding: 10px;
+                gap: 8px;
+            }
+            .thoughts-image img {
+                max-height: 120px;
+            }
         }
     </style>
 </head>
@@ -403,7 +465,21 @@
             </iframe>
         </div>
     </div>
-<center><img src="http://192.3.3.151/bot_thoughts.png" /></center>
+
+    <!-- BOT THOUGHTS FOOTER -->
+    <div class="thoughts-footer">
+        <div class="thoughts-label">
+            <span class="brain-dot"></span>
+            🤖 BOT THOUGHTS (UPDATES EVERY 10 MIN)
+        </div>
+        <div class="thoughts-image">
+            <img src="http://192.3.3.151/bot_thoughts.png" alt="Bot thoughts screenshot" />
+        </div>
+        <div class="timestamp" id="timestamp">
+            Last update: --
+        </div>
+    </div>
+
     <script>
         const modal = document.getElementById('splashModal');
         const launchBtn = document.getElementById('launchBtn');
@@ -422,6 +498,23 @@
                 modal.classList.add('hidden');
             }
         });
+
+        // Auto-refresh timestamp and bust cache on image
+        function updateTimestamp() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString();
+            document.getElementById('timestamp').innerHTML = '🕐 Last update: ' + timeStr;
+            
+            // Bust cache on image
+            const img = document.querySelector('.thoughts-image img');
+            const currentSrc = img.src;
+            const bustCache = '?t=' + new Date().getTime();
+            img.src = currentSrc.split('?')[0] + bustCache;
+        }
+
+        // Update timestamp every 10 seconds (image updates every 10 min, but timestamp shows fresh)
+        setInterval(updateTimestamp, 10000);
+        updateTimestamp();
     </script>
 </body>
 </html>
