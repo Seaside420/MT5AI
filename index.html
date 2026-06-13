@@ -21,7 +21,7 @@
             overflow: hidden;
         }
 
-        /* ========== HEADER (Compact) ========== */
+        /* ========== HEADER ========== */
         .header {
             background: #0f172a;
             border-bottom: 1px solid #1e293b;
@@ -79,11 +79,15 @@
             color: #5a6d80;
         }
 
+        .header-right strong {
+            color: #cbd5e1;
+        }
+
         /* ========== MAIN SPLIT LAYOUT ========== */
         .main-container {
             display: flex;
             flex: 1;
-            min-height: 1200;
+            min-height: 0;
             gap: 1px;
             background: #1e293b;
         }
@@ -138,14 +142,14 @@
             background: #0f172a;
         }
 
-        /* ========== BOT THOUGHTS FOOTER ========== */
+        /* ========== FOOTER ========== */
         .thoughts-footer {
             flex-shrink: 0;
             background: #0a0f1a;
             border-top: 1px solid #1e293b;
             padding: 8px 20px;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
             gap: 20px;
             flex-wrap: wrap;
@@ -154,7 +158,7 @@
         .footer-left {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             flex-shrink: 0;
         }
 
@@ -167,7 +171,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             color: #5a6d80;
-            flex-shrink: 0;
         }
 
         .thoughts-label .brain-dot {
@@ -192,40 +195,116 @@
         .timestamp {
             font-size: 10px;
             color: #475569;
-            flex-shrink: 0;
             font-family: monospace;
         }
 
-        /* Trading Results Summary Container */
-        .results-summary {
-            flex: 1;
-            min-width: 260px;
-            max-width: 1000px;
+        /* Report Button */
+        .report-btn {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+        }
+
+        .report-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        }
+
+        /* ========== RESULTS POPUP MODAL ========== */
+        .results-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.25s ease;
+        }
+
+        .results-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .results-modal-content {
             background: #f8fafc;
-            border-radius: 1rem;
-            margin: 4px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0;
+            border-radius: 1.5rem;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
             overflow-y: auto;
-            max-height: 340px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: modalPop 0.3s ease;
         }
 
-        .results-summary::-webkit-scrollbar {
-            width: 4px;
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
-        .results-summary::-webkit-scrollbar-track {
-            background: #e2e8f0;
-            border-radius: 4px;
+        .results-modal-header {
+            background: #0f172a;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem 1.5rem 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .results-summary::-webkit-scrollbar-thumb {
-            background: #94a3b8;
-            border-radius: 4px;
+        .results-modal-header h3 {
+            color: #e2e8f0;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
+        .close-modal {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 24px;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .close-modal:hover {
+            color: #ef4444;
+        }
+
+        .results-modal-body {
+            padding: 1.5rem;
+        }
+
+        /* results inner styles */
         .results-inner {
-            padding: 0.9rem 1.2rem;
+            padding: 0;
         }
 
         .results-title {
@@ -239,6 +318,13 @@
             font-weight: 600;
             color: #0f172a;
             font-size: 1.1rem;
+        }
+
+        .results-title h4 {
+            margin: 6px 0 0 0;
+            font-weight: 500;
+            color: #475569;
+            font-size: 0.8rem;
         }
 
         .stat-row {
@@ -269,10 +355,6 @@
 
         .stat-item .loss-value {
             color: #dc2626;
-        }
-
-        .drawdown-group {
-            margin-bottom: 0.3rem;
         }
 
         .drawdown-title {
@@ -467,23 +549,17 @@
             box-shadow: 0 8px 20px rgba(0, 230, 118, 0.3);
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 800px) {
             .main-container {
                 flex-direction: column;
             }
-            .panel-header {
-                padding: 8px 16px;
-            }
             .thoughts-footer {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .results-summary {
-                max-width: 100%;
-            }
-            .footer-left {
+                flex-direction: row;
                 justify-content: space-between;
+            }
+            .results-modal-content {
+                width: 95%;
+                max-height: 90vh;
             }
         }
     </style>
@@ -509,7 +585,6 @@
                         <span class="asset-tag">FOREX</span>
                     </div>
                 </div>
-
                 <div class="info-section">
                     <h4>🛡️ INFO FOR COPY SIGNAL</h4>
                     <ul class="rule-list">
@@ -517,15 +592,14 @@
                         <li>It uses Stop Loss | Target Price | Breakeven | Max Spread</li>
                         <li>Max 5 positions per symbol and direction</li>
                         <li>Strict Risk vs Reward logic with balanced exposure across pairs</li>											
-                        <li>Correlation related risk avoidence</li>						
-                        <li>Economic Calandar | Market Sentiment</li>						
+                        <li>Correlation related risk avoidance</li>						
+                        <li>Economic Calendar | Market Sentiment</li>						
                         <li>CCI + HMA + ATR + Fundamentals + Retail Sentiment + World News</li>
                     </ul>
                 </div>
-
                 <div class="disclaimer">
                     <p>⚠️ TESTING • This is running on a demo account, no real funds at risk.<br>
-                    Live account will be activated after approval of succesful testing data</p>
+                    Live account will be activated after approval of successful testing data</p>
                 </div>
             </div>
             <div class="modal-footer">
@@ -542,7 +616,7 @@
             <span class="header-badge">Connected</span>
         </div>
         <div class="header-right">
-            <span>Strategy edited - 07/06/2026 NEW Login because AI uses history. ACCOUNT: <strong>907794</strong> PASSWORD: <strong>Testing1!</strong></span>
+            <span>Strategy edited - 07/06/2026 | ACCOUNT: <strong>907794</strong> PASSWORD: <strong>Testing1!</strong></span>
         </div>
     </div>
 
@@ -553,24 +627,20 @@
                 <span class="indicator ai"></span>
                 AGENT TERMINAL: Account status, symbol specs/indicators, execute/modify trades, history/marketbook/news/retail sentiment 
             </div>
-            <iframe src="https://udify.app/chat/XfseWXYpuSiL7k3s"
-                    allowfullscreen>
-            </iframe>
+            <iframe src="https://udify.app/chat/XfseWXYpuSiL7k3s" allowfullscreen></iframe>
         </div>
 
         <!-- RIGHT: MT5 Web Terminal -->
         <div class="panel">
             <div class="panel-header">
                 <span class="indicator mt5"></span>
-                MT5 TERMINAL: BlackBull Markets standard demo account, $1500 deposit. Use Login to view account
+                MT5 TERMINAL: BlackBull Markets standard demo account, $1500 deposit
             </div>
-            <iframe src="https://mt5-demo.blackbull.com/terminal"
-                    allowfullscreen>
-            </iframe>
+            <iframe src="https://mt5-demo.blackbull.com/terminal" allowfullscreen></iframe>
         </div>
     </div>
 
-    <!-- FOOTER: bot info + trading results summary -->
+    <!-- FOOTER with Report Button -->
     <div class="thoughts-footer">
         <div class="footer-left">
             <div class="thoughts-label">
@@ -578,104 +648,142 @@
                 🤖 © SEASIDE420 
                 <a href="https://www.seaside420.com" target="_blank">info and contact</a>
             </div>
-            <div class="timestamp" id="timestamp">
+            <div class="timestamp">
                 Running since: 07/06/2026
             </div>
         </div>
-        
-        <!-- Trading Results Summary Card (Fixed placement) -->
-        <div class="results-summary">
-            <div class="results-inner">
-                <div class="results-title">
-                    <h2>📊 Trading Results Summary for week 1 <b>(SETTINGS ADJUSTMENT DONE ON 13/06/26)</b></h2>
-                    <h2>Increasing Time frame from M15 to H1. Increasing distance between orders. Decreasing LotSize.</h2>
-                    <h2>Objective: <b>Less trades / better trades</b></h2>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Total Net Profit:</span> <span class="value">97.20</span></div>
-                    <div class="stat-item"><span class="label">Gross Profit:</span> <span class="value">2,689.39</span></div>
-                    <div class="stat-item"><span class="label">Gross Loss:</span> <span class="value loss-value">-2,592.19</span></div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Profit Factor:</span> <span class="value">1.04</span></div>
-                    <div class="stat-item"><span class="label">Expected Payoff:</span> <span class="value">0.33</span></div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Recovery Factor:</span> <span class="value">0.16</span></div>
-                    <div class="stat-item"><span class="label">Sharpe Ratio:</span> <span class="value">0.02</span></div>
-                </div>
-                
-                <div class="stat-row" style="flex-direction: column;">
-                    <div class="drawdown-title">📉 Balance Drawdown</div>
-                    <div class="drawdown-stats">
-                        <span><span class="label">Absolute:</span> 302.06</span>
-                        <span><span class="label">Maximal:</span> 624.20 (34.26%)</span>
-                        <span><span class="label">Relative:</span> 34.26% (624.20)</span>
+        <button class="report-btn" id="reportBtn">
+            📊 VIEW BACKTEST REPORT
+        </button>
+    </div>
+
+    <!-- RESULTS POPUP MODAL (hidden by default) -->
+    <div class="results-modal" id="resultsModal">
+        <div class="results-modal-content">
+            <div class="results-modal-header">
+                <h3>📈 Trading Results Summary</h3>
+                <button class="close-modal" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="results-modal-body">
+                <div class="results-inner">
+                    <div class="results-title">
+                        <h2>Week 1 Performance</h2>
+                        <h4>⚙️ SETTINGS ADJUSTMENT DONE ON 13/06/26 — Increasing Time frame from M15 to H1. Increasing distance between orders. Decreasing LotSize.</h4>
+                        <h4>🎯 Objective: <b>Less trades / better trades</b></h4>
                     </div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Total Trades:</span> 292</div>
-                    <div class="stat-item"><span class="label">Short Trades (won %):</span> 136 (69.85%)</div>
-                    <div class="stat-item"><span class="label">Long Trades (won %):</span> 156 (68.59%)</div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Profit Trades (% of total):</span> 202 (69.18%)</div>
-                    <div class="stat-item"><span class="label">Loss Trades (% of total):</span> 90 (30.82%)</div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Largest profit trade:</span> 125.44</div>
-                    <div class="stat-item"><span class="label">Largest loss trade:</span> <span class="loss-value">-131.40</span></div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Average profit trade:</span> 13.31</div>
-                    <div class="stat-item"><span class="label">Average loss trade:</span> <span class="loss-value">-28.80</span></div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Maximum consecutive wins ($):</span> 21 (232.88)</div>
-                    <div class="stat-item"><span class="label">Maximum consecutive losses ($):</span> 7 (-189.88)</div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Maximal consecutive profit (count):</span> 256.81 (6)</div>
-                    <div class="stat-item"><span class="label">Maximal consecutive loss (count):</span> <span class="loss-value">-326.51 (4)</span></div>
-                </div>
-                
-                <div class="stat-row">
-                    <div class="stat-item"><span class="label">Average consecutive wins:</span> 4</div>
-                    <div class="stat-item"><span class="label">Average consecutive losses:</span> 2</div>
-                </div>
-                
-                <div class="footer-note">
-                    backtest results • summary report
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Total Net Profit:</span> <span class="value">97.20</span></div>
+                        <div class="stat-item"><span class="label">Gross Profit:</span> <span class="value">2,689.39</span></div>
+                        <div class="stat-item"><span class="label">Gross Loss:</span> <span class="value loss-value">-2,592.19</span></div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Profit Factor:</span> <span class="value">1.04</span></div>
+                        <div class="stat-item"><span class="label">Expected Payoff:</span> <span class="value">0.33</span></div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Recovery Factor:</span> <span class="value">0.16</span></div>
+                        <div class="stat-item"><span class="label">Sharpe Ratio:</span> <span class="value">0.02</span></div>
+                    </div>
+                    
+                    <div class="stat-row" style="flex-direction: column;">
+                        <div class="drawdown-title">📉 Balance Drawdown</div>
+                        <div class="drawdown-stats">
+                            <span><span class="label">Absolute:</span> 302.06</span>
+                            <span><span class="label">Maximal:</span> 624.20 (34.26%)</span>
+                            <span><span class="label">Relative:</span> 34.26% (624.20)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Total Trades:</span> 292</div>
+                        <div class="stat-item"><span class="label">Short Trades (won %):</span> 136 (69.85%)</div>
+                        <div class="stat-item"><span class="label">Long Trades (won %):</span> 156 (68.59%)</div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Profit Trades (% of total):</span> 202 (69.18%)</div>
+                        <div class="stat-item"><span class="label">Loss Trades (% of total):</span> 90 (30.82%)</div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Largest profit trade:</span> 125.44</div>
+                        <div class="stat-item"><span class="label">Largest loss trade:</span> <span class="loss-value">-131.40</span></div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Average profit trade:</span> 13.31</div>
+                        <div class="stat-item"><span class="label">Average loss trade:</span> <span class="loss-value">-28.80</span></div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Maximum consecutive wins ($):</span> 21 (232.88)</div>
+                        <div class="stat-item"><span class="label">Maximum consecutive losses ($):</span> 7 (-189.88)</div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Maximal consecutive profit (count):</span> 256.81 (6)</div>
+                        <div class="stat-item"><span class="label">Maximal consecutive loss (count):</span> <span class="loss-value">-326.51 (4)</span></div>
+                    </div>
+                    
+                    <div class="stat-row">
+                        <div class="stat-item"><span class="label">Average consecutive wins:</span> 4</div>
+                        <div class="stat-item"><span class="label">Average consecutive losses:</span> 2</div>
+                    </div>
+                    
+                    <div class="footer-note">
+                        backtest results • summary report
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        const modal = document.getElementById('splashModal');
+        const splashModal = document.getElementById('splashModal');
         const launchBtn = document.getElementById('launchBtn');
+        const reportBtn = document.getElementById('reportBtn');
+        const resultsModal = document.getElementById('resultsModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
     
-        // Always show splash on every page load
-        modal.classList.remove('hidden');
+        // Splash modal logic
+        splashModal.classList.remove('hidden');
     
-        // Launch button handler
         launchBtn.addEventListener('click', () => {
-            modal.classList.add('hidden');
+            splashModal.classList.add('hidden');
         });
     
-        // Click outside to close
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.add('hidden');
+        splashModal.addEventListener('click', (e) => {
+            if (e.target === splashModal) {
+                splashModal.classList.add('hidden');
+            }
+        });
+    
+        // Report popup logic
+        function openReportModal() {
+            resultsModal.classList.add('active');
+        }
+    
+        function closeReportModal() {
+            resultsModal.classList.remove('active');
+        }
+    
+        reportBtn.addEventListener('click', openReportModal);
+        closeModalBtn.addEventListener('click', closeReportModal);
+    
+        // Close modal when clicking outside the content
+        resultsModal.addEventListener('click', (e) => {
+            if (e.target === resultsModal) {
+                closeReportModal();
+            }
+        });
+    
+        // Optional: Escape key closes report modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && resultsModal.classList.contains('active')) {
+                closeReportModal();
             }
         });
     </script>
